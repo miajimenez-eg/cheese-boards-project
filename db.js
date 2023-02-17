@@ -6,6 +6,9 @@ const sequelize = new Sequelize({
     storage: path.join(__dirname, "db.sqlite")
 })
 
+const { sync } = sequelize;
+
 module.exports = {
-    sequelize
+    sequelize,
+    sync
 };
