@@ -69,7 +69,7 @@ describe('User, Board and Cheese models', () => {
     })
 
     // Board model tests
-    test('can create a board', async () => {
+    test('can create and find a board', async () => {
         // create board
         const board1 = await Board.create({
             type: 'Regional French Cheese Board',
@@ -82,10 +82,6 @@ describe('User, Board and Cheese models', () => {
         expect(findBoard1.description).toBe('A plethera of cheeses from all over France');
         expect(findBoard1.rating).toBe(4);
     })
-
-    // test('can find a board', async () => {
-        
-    // })
 
     test('can update a board', async () => {
         // create board
@@ -121,21 +117,46 @@ describe('User, Board and Cheese models', () => {
     })
 
     // Cheese model tests
-    // test('can create a cheese', async () => {
+    test('can create and find a cheese', async () => {
+        // create cheese
+        const cheese1 = await Cheese.create({
+            title: 'Gouda',
+            description: 'A semi-hard cheese that originates from the Netherlands'
+        });
+        // query the db for cheese1
+        const findCheese1 = await Cheese.findByPk(cheese1.id);
+        expect(findCheese1.title).toBe('Gouda');
+        expect(findCheese1.description).toBe('A semi-hard cheese that originates from the Netherlands');
+    })
 
-    // })
+    test('can update a cheese', async () => {
+        // create cheese
+        const cheese2 = await Cheese.create({
+            title: 'Mozzarella',
+            description: 'A soft, mild cheese that originates from Spain'
+        });
+        // update cheese2
+        await Cheese.update({ description: 'A soft, mild cheese that originates from Italy'}, { where: { id: cheese2.id } });
+        // query the db for updated cheese
+        const findUpdatedCheese2 = await Cheese.findByPk(cheese2.id);
+        expect(findUpdatedCheese2.title).toBe('Mozzarella');
+        expect(findUpdatedCheese2.description).toBe('A soft, mild cheese that originates from Italy');
+    })
 
-    // test('can find a cheese', async () => {
-        
-    // })
-
-    // test('can update a cheese', async () => {
-        
-    // })
-
-    // test('can delete a cheese', async () => {
-        
-    // })
+    test('can delete a cheese', async () => {
+        // create cheese4
+        const cheese3 = await Cheese.create({
+            title: 'Feta',
+            description: 'A soft, crumbly cheese that originates from Greece'
+        });
+        // query the db for cheese3
+        let findCheese3 = await Cheese.findByPk(cheese3.id);
+        // delete cheese3
+        await Cheese.destroy({ where: { id: cheese3.id } });
+        // try to get cheese3 from db
+        findCheese3 = await Cheese.findByPk(cheese3.id);
+        expect(findCheese3).toBeNull();
+    })
 
     // Association tests
     // test('a user has many boards', async () => {
